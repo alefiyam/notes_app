@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+div.container {
+    width: 100%;
+    border: 1px solid gray;
+    min-height: 90vh;
+    background-color: #F8F8F8;
+}
+
+header{
+    padding: 1em;
+    color: white;
+    background-color: #F0F0F0;
+    clear: left;
+    text-align: center;
+}
+
+.left-div {
+    float: left;
+    max-width: 195px;
+    margin: 0;
+    overflow-y: scroll;
+    max-height: 537px;
+}
+
+.notes-div{
+    max-width: 180px;
+    margin: 0;
+    height :60px;
+    width : 180px;
+    display: inline-block;
+    border-bottom-width: thin;
+	border-bottom-color: lightgray;
+	border-bottom-style: solid;
+}
+
+article {
+    margin-left: 170px;
+    border-left: 1px solid gray;
+    padding: 1em;
+    overflow: hidden;
+    height: 505px;
+}
+
+img {
+    float: left;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<header>
+{% load static %}
+	<button id="showarea" name="showarea" value="showarea"><img src="{% static "add_image.png" %}" alt="My image" width="30" height="25"/></button>
+	<button><img src="{% static "delete_img.jpg" %}" alt="My image" width="30" height="25"/></button>
+</header>
+  
+<!--  -->
+
+<div class = "left-div" id = "ld">
+    {% for notes in notes %}
+	<div class = "notes-div" id = "nd">
+	    <input type="hidden" id="nd_item" value={{ notes.id }} name = "abc">
+	    {% if notes.text|length > 25 %}
+    		<center>{{ notes.text|truncatechars:25 }}</center><br>
+    	{% else %}
+    		{{notes.text}}
+    	{% endif %}
+    	<center>{{ notes.created_at }}</center>
+    </div>
+    {% endfor %}
+</div>
+
+<article>
+    <div>
+        <label id="notes_content"></label>
+    </div>    
+    <form action ="/add_notes/" method="post" enctype="multipart/form-data">
+	    {% csrf_token %}
+	    <textarea id="textarea" name="text" rows= "30" cols= "161"></textarea>
+    	<input type="submit" id="textarea-ok" name="ok" value="Save">
+	</form>
+
+</article>
+
+</div>
+
+</body>
+</html>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript">
+	$("#textarea, #textarea-ok").hide();
+	$("#showarea").click(function(){
+        $("#textarea").fadeIn(100);
+        $("#textarea-ok").show();
+	});
+	$("#textarea-ok").click(function(){
+      	$("#textarea").fadeOut(100);
+      	$("#textarea-ok").hide();
+    });
+    $("div#nd.notes-div").click(function(){
+    	// var id = $("p#nid").html();
+    	var id = $(this).find('input').val()
+
+	    $.ajax({
+	        url: '/show_notes/',
+	        data: {
+	          'id': id
+	        },
+            success: function(result){
+            $("#notes_content").text(result.notes_obj)}    
+	    });
+	});
+</script>
