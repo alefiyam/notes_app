@@ -115,7 +115,10 @@ img {
 	          'id': id
 	        },
             success: function(result){
-            $("#notes_content").text(result.notes_obj)}    
+            $("#notes_content").text(result.notes_obj)
+            $("#textarea").fadeOut(100);
+            $("#textarea-ok").hide();  
+            }
 	    });
 	});
 </script>
