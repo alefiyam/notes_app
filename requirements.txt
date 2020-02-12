@@ -1,6 +1,6 @@
 certifi==2017.11.5
 chardet==3.0.4
-Django==1.11.4
+Django==1.11.28
 django-paypal==0.4.1
 et-xmlfile==1.0.1
 idna==2.6
